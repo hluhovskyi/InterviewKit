@@ -1,1 +1,1 @@
-include ':eventbus-kotlin'
+include ':eventbus-kotlin', ':eventbus-java'
