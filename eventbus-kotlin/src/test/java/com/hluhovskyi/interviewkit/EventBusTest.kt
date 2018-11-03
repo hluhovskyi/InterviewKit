@@ -16,12 +16,12 @@ class EventBusTest {
     val exceptionRule: ExpectedException = ExpectedException.none()
 
     @Test
-    fun `get default, no exception`() {
+    fun `get instance, no exception`() {
         EventBus.getInstance()
     }
 
     @Test
-    fun `get default twice, buses are same`() {
+    fun `get instance twice, buses are same`() {
         val first = EventBus.getInstance()
         val second = EventBus.getInstance()
 

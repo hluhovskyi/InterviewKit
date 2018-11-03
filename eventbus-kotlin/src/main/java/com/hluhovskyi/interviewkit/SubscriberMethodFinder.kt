@@ -5,30 +5,28 @@ import java.lang.reflect.Method
 object SubscriberMethodFinder {
 
     fun findWithAnnotation(
-            target: Any,
+            subscriber: Any,
             annotationClass: Class<out Annotation>
-    ): List<SubscriberMethod> = target.javaClass.methods
+    ): List<SubscriberMethod> = subscriber.javaClass.methods
             .filter { method ->
                 method.getAnnotationsByType(annotationClass).size == 1
                         && method.parameterTypes.size == 1
             }
             .map { method ->
                 SubscriberMethod(
-                        target = target,
+                        subscriber = subscriber,
                         eventClass = method.parameterTypes.first(),
                         method = method
                 )
             }
-
-
 }
 
 data class SubscriberMethod(
-        val target: Any,
+        val subscriber: Any,
         val eventClass: Class<*>,
         private val method: Method
 ) {
     operator fun invoke(event: Any) {
-        method.invoke(target, event)
+        method.invoke(subscriber, event)
     }
 }
