@@ -16,14 +16,14 @@ class EventBusTest {
     val exceptionRule: ExpectedException = ExpectedException.none()
 
     @Test
-    fun `get default, no exception`() {
-        EventBus.getDefault()
+    fun `get instance, no exception`() {
+        EventBus.getInstance()
     }
 
     @Test
-    fun `get default twice, buses are same`() {
-        val first = EventBus.getDefault()
-        val second = EventBus.getDefault()
+    fun `get instance twice, buses are same`() {
+        val first = EventBus.getInstance()
+        val second = EventBus.getInstance()
 
         assertSame(
                 "Multiple instances of EventBus are created",
@@ -36,15 +36,15 @@ class EventBusTest {
     fun `register empty subscriber, no observing methods, exception is thrown`() {
         exceptionRule.expect(Exception::class.java)
 
-        EventBus.getDefault().register(EmptySubscriber())
+        EventBus.getInstance().register(EmptySubscriber())
     }
 
     @Test
     fun `register subscriber, post event, event is delivered`() {
         val subscriber = spy(Subscriber())
 
-        EventBus.getDefault().register(subscriber)
-        EventBus.getDefault().post(FooEvent)
+        EventBus.getInstance().register(subscriber)
+        EventBus.getInstance().post(FooEvent)
 
         verify(subscriber).observe(FooEvent)
     }
@@ -53,8 +53,8 @@ class EventBusTest {
     fun `register subscriber, post different event, event is ignored`() {
         val subscriber = spy(Subscriber())
 
-        EventBus.getDefault().register(subscriber)
-        EventBus.getDefault().post(BarEvent)
+        EventBus.getInstance().register(subscriber)
+        EventBus.getInstance().post(BarEvent)
 
         verify(subscriber, never()).observe(any())
     }
@@ -63,9 +63,9 @@ class EventBusTest {
     fun `register subscriber, unregister subscriber, event is ignored`() {
         val subscriber = spy(Subscriber())
 
-        EventBus.getDefault().register(subscriber)
-        EventBus.getDefault().unregister(subscriber)
-        EventBus.getDefault().post(FooEvent)
+        EventBus.getInstance().register(subscriber)
+        EventBus.getInstance().unregister(subscriber)
+        EventBus.getInstance().post(FooEvent)
 
         verify(subscriber, never()).observe(any())
     }
@@ -74,8 +74,8 @@ class EventBusTest {
     fun `register multiple subscriber, post first event, methods invoked correctly`() {
         val subscriber = spy(MultipleSubscriber())
 
-        EventBus.getDefault().register(subscriber)
-        EventBus.getDefault().post(FooEvent)
+        EventBus.getInstance().register(subscriber)
+        EventBus.getInstance().post(FooEvent)
 
         verify(subscriber).observeFoo(FooEvent)
         verify(subscriber, never()).observeBar(any())
@@ -85,8 +85,8 @@ class EventBusTest {
     fun `register multiple subscriber, post second event, methods invoked correctly`() {
         val subscriber = spy(MultipleSubscriber())
 
-        EventBus.getDefault().register(subscriber)
-        EventBus.getDefault().post(BarEvent)
+        EventBus.getInstance().register(subscriber)
+        EventBus.getInstance().post(BarEvent)
 
         verify(subscriber).observeBar(BarEvent)
         verify(subscriber, never()).observeFoo(any())
