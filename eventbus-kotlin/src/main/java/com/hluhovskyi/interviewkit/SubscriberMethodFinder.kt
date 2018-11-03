@@ -4,6 +4,10 @@ import java.lang.reflect.Method
 
 object SubscriberMethodFinder {
 
+    /**
+     * Returns list of method defined in given `subscriber` which have only one input parameter
+     * and are annotated with `annotationClass` annotation.
+     */
     fun findWithAnnotation(
             subscriber: Any,
             annotationClass: Class<out Annotation>
@@ -21,6 +25,11 @@ object SubscriberMethodFinder {
             }
 }
 
+/**
+ * Class which holds all necessary information to implement subscription.
+ * <p>
+ * To invoke method with some event call `invoke(event)`
+ */
 data class SubscriberMethod(
         val subscriber: Any,
         val eventClass: Class<*>,
